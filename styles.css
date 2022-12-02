@@ -1,0 +1,65 @@
+body {
+    background: midnightblue;
+}
+
+h1 {
+    color: lightslategray;
+    font-size: 55px;
+    text-align: center;
+    text-shadow: 3px 3px 3px black;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    background-color: aliceblue;
+    width: 80%;
+    color: midnightblue;
+    padding-left: 15%;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border-bottom: 1px solid midnightblue;
+    position: relative;
+    box-shadow: 2px 2px 2px black;
+}
+
+form input {
+    float: left;
+    padding-left: 2%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    width: 20%;
+    margin-left: 2%;
+    margin-right: 3%;
+    display: block;
+    box-shadow: 2px 2px 2px black;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+button {
+    padding-top: 1%;
+    padding-bottom: 1%;
+    display: block;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px black;
+}
+
+button:hover {
+    box-shadow: 3px 3px 3px black;
+}
+
+.content {
+    background: slategray;
+    margin: 25px auto;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    border-radius: 10px;
+    box-shadow: 3px 3px 3px black;
+    max-width: 1050px;
+}

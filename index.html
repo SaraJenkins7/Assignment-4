@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Course Schedule</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <h1>Spring Course Schedule</h1>
+    <div class="content">
+        <form id="add-schedule-form">
+            <input type="text" name="course" placeholder="Course Name">
+            <input type="text" name="professor" placeholder="Professor Name">
+            <input type="text" name="location" placeholder="Location">
+            <button>Add Course to Schedule</button>
+        </form>
+        <ul id="schedule-list"></ul>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, doc, deleteDoc, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyDpDrPAcfQZutvbdc71p76f_EA4QUJ38L8",
+          authDomain: "spring-course-schedule.firebaseapp.com",
+          projectId: "spring-course-schedule",
+          storageBucket: "spring-course-schedule.appspot.com",
+          messagingSenderId: "746524631050",
+          appId: "1:746524631050:web:3be9358d8a5b6c59707ff3"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        async function getSchedule(db) {
+            const scheduleCol = collection(db, "schedule");
+            const scheduleSnapshot = await getDocs(scheduleCol);
+            const scheduleList = scheduleSnapshot.docs.map((doc) => doc.data());
+            return scheduleList;
+        }
+
+        const scheduleList = document.querySelector('#schedule-list');
+        const form = document.querySelector('#add-schedule-form');
+
+        function renderSchedule(dc) {
+            let li = document.createElement("li");
+            let course = document.createElement("span");
+            let professor = document.createElement("span");
+            let location = document.createElement("span");
+            let cross = document.createElement('div');
+
+            li.setAttribute('data-id', dc.id);
+            course.textContent = dc.data().course;
+            professor.textContent = dc.data().professsor;
+            location.textContent = dc.data().location;
+            cross.textContent = 'x';
+
+            li.appendChild(course);
+            li.appendChild(professor);
+            li.appendChild(location);
+            li.appendChild(cross);
+
+            scheduleList.appendChild(li);
+
+            cross.addEventListener('click', (e) => {
+                e.stopPropagation();
+                let id = e.target.parentElement.getAttribute('data-id');
+                deleteDoc(doc(db, "schedule", id));
+            });
+        }
+
+        const schedule = getDocs(collection(db, "schedule")).then((snapshot) => {
+            snapshot.forEach((doc) => {
+                renderSchedule(doc);
+            });
+        });
+
+        const q = query(collection(db, "schedule"), where("course", "==", "Back End Development"));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            console.log(doc.id, "=>", doc.data());
+        });
+
+        const upDoc = doc(db, "schedule", "9kcvD7uZlrFhHDVqcS6Y");
+
+        updateDoc(upDoc, {
+            course: "Mobile Web Development"
+        });
+
+        form.addEventListener(('submit'), (e) => {
+            e.preventDefault();
+            const docRef = addDoc(collection(db, "schedule"), {
+                course: form.course.value,
+                professor: form.professor.value,
+                location: form.location.value
+            });
+        });
+    </script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>
